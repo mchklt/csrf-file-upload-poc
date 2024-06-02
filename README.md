@@ -38,3 +38,8 @@ To use this PoC:
    git clone https://github.com/yourusername/csrf-file-upload-poc.git
    cd csrf-file-upload-poc
 2. Read comments and edit !
+
+
+## NOTE
+
+Read More on my [medium Blog](https://medium.com/@mchklt/self-xss-via-filename-csrf-on-contact-us-multipart-data-form-f852dd539547)
